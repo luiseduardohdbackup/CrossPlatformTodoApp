@@ -1,0 +1,210 @@
+
+.touchButton {
+    width: 4em;
+    height: 2em;
+    background: #4f4f4f;
+}
+
+.buttonDown {
+    background: #2699cc;
+}
+
+.initiallyHidden {
+    display: none;
+}
+
+body {
+    font-size: 1.5em;
+    color: #ccc;
+    font-family: Lato,Helvetica,Arial;
+    height: 100%;
+}
+
+.header {
+    position: absolute;
+    height: 2em;
+    top: 0em;
+    left: 0;
+    right: 0;
+    background: #222;
+}
+
+.page {
+    position: absolute;
+    top: 2em;
+    left: 0;
+    right: 0;
+    bottom: 2em;
+    overflow: auto;
+    background: #444;
+}
+
+.footer {
+    position: absolute;
+    height: 2em;
+    left: 0;
+    right: 0;
+    bottom: 0em;
+    background: #222;
+}
+
+.overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .5);
+}
+
+.overlay > * {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.vcenter {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/*=====================
+    navbar
+=======================*/
+
+.title {
+    font-size: 1.5em;
+    padding: .25em;
+    float: left;
+}
+
+#logoutButton {
+    float: right;
+}
+
+#logoutButton > .vcenter {
+    height: 2em;
+    width: 4em;
+    
+}
+
+/*=====================
+    page
+=======================*/
+
+.todo {
+    background: #2f2f2f;
+    border-bottom: 1px solid black;
+    height: 2em;
+}
+
+.currentTodo {
+    background: #3f3f3f;
+}
+
+.todoContent {
+    float: left;
+    padding: .5em;
+}
+
+#deleteButton {
+    float: right;
+    height: 1.5em;
+    margin: .25em;
+    text-align: center;
+}
+
+#deleteButton > .vcenter {
+    height: 1.5em;
+    width: 4em;
+}
+
+
+/*=====================
+    footer
+=======================*/
+
+#createTodoButton {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#createTodoButton > .vcenter {
+    font-size: 1.5em;
+    height: 1.5em;
+    width: 3em;
+    
+}
+
+/*=====================
+    create todo overlay
+=======================*/
+
+#createTodoOverlay {
+    height: 5em;
+    margin-top: -2.5em;
+}
+
+#createTodoOverlay > * {
+    margin-bottom: .5em;
+}
+
+#createTodoOverlay > input {
+    display: inline-block;
+    font-size: 1.25em;
+    max-width: 80%;
+    color: #ccc;
+    background: #222;
+}
+
+#createTodoOverlay > .touchButton {
+    display: inline-block;
+}
+
+#createTodoOverlay > .touchButton > .vcenter {
+    height: 2em;
+    width: 4em;
+}
+
+/*=====================
+    login overlay
+=======================*/
+
+#loginOverlay {
+    height: 10em;
+    margin-top: -5em;
+}
+
+#loginOverlay > * {
+    margin-bottom: .5em;
+    display: inline-block;
+}
+
+#loginOverlay > .touchButton {
+    display: inline-block;
+}
+
+#loginOverlay > .field {
+    display: inline-block;
+    max-width: 80%;
+    background: #333;
+    padding: .25em;
+}
+
+#loginOverlay > .field > input {
+    color: #ccc;
+    background: #222;
+    box-sizing: border-box;
+    box-sizing: -moz-border-box;
+    box-sizing: -webkit-border-box;
+    max-width: 100%;
+    font-size: 1.25em;
+}
+
+#loginOverlay > .touchButton > .vcenter {
+    height: 2em;
+    width: 4em;
+}

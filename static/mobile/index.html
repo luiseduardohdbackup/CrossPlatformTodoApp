@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Todo </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link href="/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="/mobile/css/style.css" rel="stylesheet" type="text/css">
+
+    <script src="/libs/jq/jquery-1.8.2.min.js"></script>
+    <script src="/libs/jq/addTappableJQPlugin.js"></script>
+    <script src="/mobile/js/logout.js"></script>
+    <script src="/mobile/js/login.js"></script>
+    <script src="/js/TodoAPI.js"></script>
+    <script src="/mobile/js/UI.js"></script>
+
+    <script src="/js/TodoApp.js"></script>
+
+    <script>
+        window.addEventListener('load', function(){
+            new TodoApp();
+        });
+    </script>
+</head>
+<body>
+
+    <div id="deleteButton" class="touchButton">
+        <div class="vcenter">done</div>
+    </div>
+
+    <!--==================
+        page structure
+    ===================-->
+    <div class="header">
+        <div class="title"> Todo </div>
+        <div id="logoutButton" class="touchButton">
+            <div class="vcenter">logout</div>
+        </div>
+    </div>
+    <div class="page">
+        <ul id="todos"> </ul>
+    </div>
+    <div class="footer">
+        <div id="createTodoButton" class="touchButton">
+            <div class="vcenter">+</div>
+        </div>
+    </div>
+
+    <div class="overlay initiallyHidden">
+        
+    </div>
+
+    <!--==================
+        overlays
+    ===================-->
+
+    <div id="createTodoOverlay" class="initiallyHidden">
+        <input id="createTodoContentInput" type="text" placeholder="enter todo here"/><br>
+        <div id="createTodoContentOkButton" class="touchButton">
+            <div class="vcenter">ok</div>
+        </div>
+        <div id="createTodoContentCancelButton" class="touchButton">
+            <div class="vcenter">cancel</div>
+        </div>
+    </div>
+
+    <div id="loginOverlay" class="initiallyHidden">
+        <div id="usernameField" class="field"> username: 
+            <input id="usernameInput" type="text"/> 
+        </div><br>
+        <div id="passwordField" class="field"> password: 
+            <input id="passwordInput" type="password"/> 
+        </div><br>
+        <div id="loginButton" class="touchButton"> 
+            <div class="vcenter">login</div>
+        </div>
+        <div id="registerButton" class="touchButton">
+            <div class="vcenter">register</div>
+        </div>
+    </div>
+</body>
+</html>

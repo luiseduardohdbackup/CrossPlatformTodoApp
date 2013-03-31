@@ -1,0 +1,92 @@
+
+button {
+    background: #eee;
+}
+
+button:hover {
+    background: #f8f8f8;
+}
+
+/*===============
+    NAVBAR
+=================*/
+
+#navbar {
+    border-bottom: solid 1px black;
+    width: 100%;
+    overflow: hidden;
+    padding: .5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+#header {
+    font-size: 2em;
+    float: left;
+}
+
+#logoutButton {
+    float: right;
+}
+
+/*===============
+    CREATE TODO
+=================*/
+
+#createTodo {
+    padding: 2em;
+    border-bottom: 1px solid #999;
+    padding-right: 4em;
+    display: inline-block;
+
+}
+
+#createTodoButton {
+    margin-left: 2.75em;
+    font-size: 1.25em;
+}
+
+#createTodoContentInput {
+    width: 16em;
+    font-size: 1em;
+    border: solid 1px black;
+    padding: .33em;
+    width: 16em;
+    text-align: center;
+}
+
+/*===============
+    TODOS
+=================*/
+
+#todos {
+    padding: 2em;
+}
+
+.todo {
+    padding: .125em;
+    width: 100%;
+    min-height: 2em;
+}
+
+.todoContent {
+    display: inline-block;
+    border: solid .1em black;
+    padding: .33em;
+    width: 16em;
+    text-align: center;
+}
+
+.todo:hover .todoContent {
+    padding: .28em;
+    border: solid .15em black;
+}
+
+#deleteButton {
+    margin-left: 2em;
+    position: absolute; /* for some reason fixes weird resizing on delete attach */
+    font-size: 1.25em;
+}
