@@ -18,7 +18,23 @@
     <script src="/js/TodoApp.js"></script>
 
     <script>
+
         window.addEventListener('load', function(){
+
+            // iOS5 or less does not have .bind so add it if needed (iOS6 has it!)
+            function patchBind(){
+               if (Function.prototype.bind === undefined){
+                  Function.prototype.bind = function (bind) {
+                       var self = this;
+                       return function () {
+                           var args = Array.prototype.slice.call(arguments);
+                           return self.apply(bind || null, args);
+                       };
+                   };
+               }
+            }
+            patchBind();
+
             new TodoApp();
         });
     </script>
