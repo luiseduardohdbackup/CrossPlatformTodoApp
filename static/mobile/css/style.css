@@ -1,4 +1,33 @@
 
+/* turn off the annoying highlight on a tap (we provide our own visual feedback) */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+}
+
+/* prevent the user from highlighting any text */
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* allow highlighting text in inputs */
+input {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+body {
+    font-size: 1.5em;
+    color: #ccc;
+    font-family: Lato,Helvetica,Arial;
+}
+
 .touchButton {
     width: 4em;
     height: 2em;
@@ -9,16 +38,32 @@
     background: #2699cc;
 }
 
+.transition {
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+
+    /* prevents flickering and other weirdness */
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
 .initiallyHidden {
     display: none;
 }
 
-body {
-    font-size: 1.5em;
-    color: #ccc;
-    font-family: Lato,Helvetica,Arial;
-    height: 100%;
+.vcenter {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
 }
+
+/*=====================
+    structure
+=======================*/
 
 .header {
     position: absolute;
@@ -44,12 +89,12 @@ body {
     height: 2em;
     left: 0;
     right: 0;
-    bottom: 0em;
+    bottom: 0;
     background: #222;
 }
 
 .overlay {
-    position: fixed;
+    position: absolute;
     left: 0;
     right: 0;
     top: 0;
@@ -57,17 +102,18 @@ body {
     background: rgba(0, 0, 0, .5);
 }
 
+.overlay.hidden {
+    left: 0;
+    right: 0;
+    top: -100%;
+    bottom: 100%;
+}
+
 .overlay > * {
     position: absolute;
     top: 50%;
     left: 0;
     right: 0;
-    text-align: center;
-}
-
-.vcenter {
-    display: table-cell;
-    vertical-align: middle;
     text-align: center;
 }
 
@@ -134,7 +180,7 @@ body {
 
 #createTodoButton > .vcenter {
     font-size: 1.5em;
-    height: 1.5em;
+    height: 1.33333em; /* .touchButtonWidth/newFontSize = 2/1.5 */
     width: 3em;
     
 }

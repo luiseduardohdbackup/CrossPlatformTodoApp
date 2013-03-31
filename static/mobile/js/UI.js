@@ -9,11 +9,12 @@
 //  }
 var UI = function(config){
 
+    this.C = {};
+    this.initTransitionEnd();
+
     this.events = config.events;
 
     this.initDom();
-    this.dom.overlay.removeClass('initiallyHidden');
-    this.dom.overlay.hide();
 
     this.dom.deleteButton.removeClass('initiallyHidden');
     this.dom.deleteButton.detach();
@@ -43,6 +44,17 @@ var UI = function(config){
 }
 
 UI.prototype = {
+    initTransitionEnd: function(){
+        if ($.browser.webkit){
+            this.C.TRANSITION_END = "webkitTransitionEnd";
+        }
+        else if ($.browser.opera){
+            this.C.TRANSITION_END = "oTransitionEnd";
+        }
+        else {
+            this.C.TRANSITION_END = "transitionend";
+        }
+    },
     initDom: function(){
         this.dom = {
             todos: $('#todos'),
@@ -68,15 +80,18 @@ UI.prototype = {
     },
 
     showOverlay: function(overlay){
-        this.dom.overlay.show();
         this.dom.overlay.append(overlay);
+
         this.dom.page.css('overflow', 'hidden');
+        this.dom.overlay.removeClass('hidden');
     },
 
     hideOverlay: function(overlay){
-        this.dom.overlay.hide();
-        overlay.detach();
-        this.dom.page.css('overflow', 'auto');
+        this.dom.overlay.addClass('hidden');
+        this.dom.overlay.one(this.C.TRANSITION_END, function(e){
+            overlay.detach();
+            this.dom.page.css('overflow', 'auto');
+        }.bind(this));
     },
 
     showCreateTodoOverlay: function(){
@@ -124,10 +139,15 @@ UI.prototype = {
         this.dom.todos.prepend(domTodo);
 
         domTodo.ontap(null, null, function(){
+            var hadClass = domTodo.hasClass('currentTodo');
+
             $('.currentTodo').removeClass('currentTodo');
-            domTodo.addClass('currentTodo');
             this.dom.deleteButton.detach();
-            domTodo.append(this.dom.deleteButton);
+
+            if (!hadClass){
+                domTodo.addClass('currentTodo');
+                domTodo.append(this.dom.deleteButton);
+            }
         }.bind(this));
     },
 
