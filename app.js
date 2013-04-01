@@ -63,7 +63,7 @@ app.all('/', function mobileDesktopRouter(req, res, next){
     }
 });
 
-app.get('/', function(req, res, next){
+app.get('/desktop/', function(req, res, next){
     mongoExpressAuth.checkLogin(req, res, function(err){
         if (err)
             res.sendfile('static/login.html');
