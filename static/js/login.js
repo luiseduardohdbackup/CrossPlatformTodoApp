@@ -11,8 +11,8 @@ window.addEventListener('load', function(){
                 window.location = '/';
             },
             onRegisterSuccess: function(){
-                var username = usernameInput.value;
-                var password = passwordInput.value;
+                var username = usernameInput.val();
+                var password = passwordInput.val();
 
                 login(username, password);
             },
@@ -47,22 +47,22 @@ window.addEventListener('load', function(){
         //  DOM
         //==================
 
-        var loginButton = document.getElementById('loginButton');
-        var registerButton = document.getElementById('registerButton');
+        var loginButton = $('#loginButton');
+        var registerButton = $('#registerButton');
 
-        var usernameInput = document.getElementById('usernameInput');
-        var passwordInput = document.getElementById('passwordInput');
+        var usernameInput = $('#usernameInput');
+        var passwordInput = $('#passwordInput');
 
-        $(loginButton).onButtonTap(function(){
-            var username = usernameInput.value;
-            var password = passwordInput.value;
+        loginButton.onButtonTap(function(){
+            var username = usernameInput.val();
+            var password = passwordInput.val();
 
             login(username, password);
         });
 
-        $(registerButton).onButtonTap(function(){
-            var username = usernameInput.value;
-            var password = passwordInput.value;
+        registerButton.onButtonTap(function(){
+            var username = usernameInput.val();
+            var password = passwordInput.val();
 
             register(username, password);
         });
@@ -72,25 +72,27 @@ window.addEventListener('load', function(){
         //==================
 
         function login(username, password, done){
-            post(
-                '/login', 
-                {   
+            var request = $.ajax({
+                type: 'post',
+                url: '/login',
+                data: {
                     username: username, 
                     password: password 
-                }, 
-                handleLoginResult
-            );
+                }
+            });
+            setupCallback(request, handleLoginResult);
         }
 
         function register(username, password, done){
-            post(
-                '/register', 
-                {   
+            var request = $.ajax({
+                type: 'post',
+                url: '/register',
+                data: {
                     username: username, 
                     password: password 
-                }, 
-                handleRegisterResult
-            );
+                }
+            });
+            setupCallback(request, handleRegisterResult);
         }
 
         function handleRegisterResult(err, result){
@@ -112,29 +114,16 @@ window.addEventListener('load', function(){
                 g.onLoginFail(result);
         }
 
-        function post(url, data, done){
-            var request = new XMLHttpRequest();
-            var async = true;
-            request.open('post', url, async);
-            request.onload = function(){
-                if (done !== undefined){
-                    var res = request.responseText
-                    done(null, res);
-                }
-            }
-            request.onerror = function(err){
+        function setupCallback(request, done){
+            request.done(function(data) {
+                if (data.err !== undefined)
+                    done(data.err, null);
+                else
+                    done(null, data);
+            });
+            request.fail(function(jqXHR, textStatus, err){
                 done(err, null);
-            }
-            if (data !== undefined){
-                var body = new FormData();
-                for (var key in data){
-                    body.append(key, data[key]);
-                }
-                request.send(body);
-            }
-            else {
-                request.send();
-            }
+            });
         }
     })();
 });
