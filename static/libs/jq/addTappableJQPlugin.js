@@ -11,96 +11,113 @@ function addTappableJQPlugin(){
     }
 
     $.fn.ontap = function(downCB, upCB, tapCB, longCB){
-        if (downCB)
-            downCB = downCB.bind(this);
-        if (upCB)
-            upCB = upCB.bind(this);
-        if (tapCB)
-            tapCB = tapCB.bind(this);
+        new TapManager(this, downCB, upCB, tapCB, longCB)
+    }
 
-        var startx;
-        var starty;
-        
-        var potentialTap;
+    function TapManager(dom, onDown, onUp, onTap, onLong){
+        this.dom = dom;
+        this.onDown = onDown || function(){ };
+        this.onUp = onUp || function(){ };
+        this.onTap = onTap || function(){ };
+        this.onLong = onLong || function(){ };
+        this.bindFnsToDom();
 
-        var down = function(x, y){
-            startx = x;
-            starty = y;
-            potentialTap = true;
-            if (downCB)
-                downCB();
+        this.state = {
+            startX: 0,
+            startY: 0,
+            potentialTap: false,
+        };
 
-            if (longCB !== undefined)
-                setTimeout(checkLong, 500);
-        }
+        this.registerEvents();
+    }
 
-        var checkLong = function(){
-            if (potentialTap){
-                potentialTap = false;
-                if (upCB)
-                    upCB();
-                setTimeout(downCB, 50);
-                setTimeout(upCB, 100);
-                setTimeout(longCB, 120);
+    TapManager.prototype = {
+        //========================
+        //  STATE
+        //========================
+        down: function(x, y){
+            this.state.startX = x;
+            this.state.startY = y;
+            this.state.potentialTap = true;
+            this.onDown()
+            setTimeout(this.checkLong.bind(this), 500);
+        },
+        move: function(x, y){
+            if (this.state.potentialTap && this.movedTooMuch(x, y)){
+                this.state.potentialTap = false;
+                this.onUp();
             }
-        }
-
-        var move = function(x, y){
-            if (potentialTap &&
-                (window.Math.abs(x - startx) > 10 || 
-                window.Math.abs(y - starty) > 10)){
-                potentialTap = false;
-                if (upCB)
-                    upCB();
+        },
+        movedTooMuch: function(x, y){
+            return (window.Math.abs(x - this.state.startX) > 10 || 
+                    window.Math.abs(y - this.state.startY) > 10);
+        },
+        up: function(){
+            if (this.state.potentialTap){
+                this.onUp();
+                this.onTap();
+                this.state.potentialTap = false;
             }
-        }
-
-        var exit = function(){
-            if (potentialTap){
-                potentialTap = false;
-                if (upCB)
-                    upCB();
+        },
+        exit: function(){
+            if (this.state.potentialTap){
+                this.state.potentialTap = false;
+                this.onUp();
             }
-        }
-
-        var up = function(){
-            if (potentialTap){
-                if (upCB)
-                    upCB();
-                tapCB();
-                potentialTap = false;
+        },
+        checkLong: function(){
+            if (this.state.potentialTap){
+                this.state.potentialTap = false;
+                this.onLong();
+                this.onUp();
             }
-        }
+        },
 
-        if ('ontouchstart' in document.documentElement){
+        //========================
+        //  INIT
+        //========================
 
-            this.on('touchstart', function(event){
+        //default jq behavior
+        bindFnsToDom: function(){
+            this.onDown = this.onDown.bind(this.dom);
+            this.onUp = this.onUp.bind(this.dom);
+            this.onTap = this.onTap.bind(this.dom);
+            this.onLong = this.onLong.bind(this.dom);
+        },
+        registerEvents: function(){
+            if ('ontouchstart' in document.documentElement)
+                this.registerTouchEvents();
+            else 
+                this.registerMouseEvents();
+        },
+        registerTouchEvents: function(){
+            this.dom.on('touchstart', function(event){
                 var x = event.originalEvent.touches[0].clientX;
                 var y = event.originalEvent.touches[0].clientY;
-                down(x, y);
-            });
-            this.on('touchend', function(event){
-                up();
-            });
-            this.on('touchleave', function(event){
-                exit();
-            });
-            this.on('touchmove', function(event){
+                this.down(x, y);
+            }.bind(this));
+            this.dom.on('touchend', function(event){
+                this.up();
+            }.bind(this));
+            this.dom.on('touchleave', function(event){
+                this.exit();
+            }.bind(this));
+            this.dom.on('touchmove', function(event){
                 var x = event.originalEvent.touches[0].clientX;
                 var y = event.originalEvent.touches[0].clientY;
-                move(x, y);
-            });
-        }
-        else {
-            this.on('mousedown', function(event){
-                down(event.clientX, event.clientY);
-            });
-            this.on('mouseout', function(event){
-                exit();
-            });
-            this.on('mouseup', function(event){
-                up();
-            });
+                this.move(x, y);
+            }.bind(this));
+        },
+        registerMouseEvents: function(){
+            this.dom.on('mousedown', function(event){
+                this.down(event.clientX, event.clientY);
+            }.bind(this));
+            this.dom.on('mouseout', function(event){
+                this.exit();
+            }.bind(this));
+            this.dom.on('mouseup', function(event){
+                this.up();
+            }.bind(this));
         }
     }
 }
