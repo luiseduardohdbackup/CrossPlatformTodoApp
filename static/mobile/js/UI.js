@@ -8,42 +8,22 @@
 //      }
 //  }
 var UI = function(config){
-
-    this.C = {};
-    this.initTransitionEnd();
-
     this.events = config.events;
 
+    this.C = {};
+
+    this.initTransitionEnd();
     this.initDom();
-
-    this.dom.deleteButton.removeClass('initiallyHidden');
-    this.dom.deleteButton.detach();
-    this.dom.deleteButton.onButtonTap(this.deleteCurrent.bind(this));
-
-    this.dom.createTodoButton.onButtonTap(this.showCreateTodoOverlay.bind(this));
-    this.dom.createTodoContentCancelButton.onButtonTap(this.cancelCreateTodoOverlay.bind(this));
-
-    this.dom.createTodoContentOkButton.onButtonTap(this.okCreateTodoOverlay.bind(this));
-
-
-    window.LogoutManager.setHangleLogoutResult(function(){
-        this.emptyTodos();
-        this.showOverlay(this.dom.loginOverlay);
-    }.bind(this));
-
-    window.LoginManager.setLoginSuccess(function(){
-        this.hideOverlay(this.dom.loginOverlay);
-        this.dom.usernameInput.val('');
-        this.dom.passwordInput.val('');
-        this.events.refresh();
-    }.bind(this));
-
-    if(!window.TodoAPI.isLoggedIn()){
-        this.showOverlay(this.dom.loginOverlay);
-    }
+    this.initEvents();
+    this.initRedirectLoginResults();
 }
 
 UI.prototype = {
+
+    //==================
+    //  INIT
+    //==================
+
     initTransitionEnd: function(){
         if ($.browser.webkit){
             this.C.TRANSITION_END = "webkitTransitionEnd";
@@ -71,6 +51,9 @@ UI.prototype = {
             deleteButton: $('#deleteButton')
         }
 
+        this.dom.deleteButton.removeClass('initiallyHidden');
+        this.dom.deleteButton.detach();
+
         this.dom.createTodoOverlay.removeClass('initiallyHidden');
         this.dom.createTodoOverlay.detach();
 
@@ -78,6 +61,33 @@ UI.prototype = {
         this.dom.loginOverlay.detach();
 
     },
+    initEvents: function(){
+        this.dom.deleteButton.onButtonTap(this.deleteCurrent.bind(this));
+        this.dom.createTodoButton.onButtonTap(this.showCreateTodoOverlay.bind(this));
+        this.dom.createTodoContentCancelButton.onButtonTap(this.cancelCreateTodoOverlay.bind(this));
+        this.dom.createTodoContentOkButton.onButtonTap(this.okCreateTodoOverlay.bind(this));
+    },
+    initRedirectLoginResults: function(){
+        window.LogoutManager.setHangleLogoutResult(function(){
+            this.emptyTodos();
+            this.showOverlay(this.dom.loginOverlay);
+        }.bind(this));
+
+        window.LoginManager.setLoginSuccess(function(){
+            this.hideOverlay(this.dom.loginOverlay);
+            this.dom.usernameInput.val('');
+            this.dom.passwordInput.val('');
+            this.events.refresh();
+        }.bind(this));
+
+        if(!window.TodoAPI.isLoggedIn()){
+            this.showOverlay(this.dom.loginOverlay);
+        }
+    },
+
+    //==================
+    //  OVERLAY
+    //==================
 
     showOverlay: function(overlay){
         this.dom.overlay.append(overlay);
@@ -111,6 +121,10 @@ UI.prototype = {
         this.dom.createTodoContentInput.val('');
         this.hideOverlay(this.dom.createTodoOverlay);
     },
+
+    //==================
+    //  ETC
+    //==================
 
     deleteCurrent: function(){
         var currentTodo = $('.currentTodo');

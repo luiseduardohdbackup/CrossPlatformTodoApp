@@ -27,15 +27,16 @@
             // iOS5 or less does not have .bind so add it if needed (iOS6 has it!)
             function patchBind(){
                if (Function.prototype.bind === undefined){
-                  Function.prototype.bind = function (bind) {
+                  Function.prototype.bind = function (newScope) {
                        var self = this;
                        return function () {
                            var args = Array.prototype.slice.call(arguments);
-                           return self.apply(bind || null, args);
+                           return self.apply(newScope || null, args);
                        };
                    };
                }
             }
+
             patchBind();
 
             new TodoApp();
@@ -43,10 +44,6 @@
     </script>
 </head>
 <body>
-
-    <div id="deleteButton" class="touchButton">
-        <div class="vcenter">done</div>
-    </div>
 
     <!--==================
         page structure
@@ -68,6 +65,14 @@
 
     <div class="overlay hidden transition">
         
+    </div>
+    
+    <!--==================
+        etc
+    ===================-->
+
+    <div id="deleteButton" class="touchButton">
+        <div class="vcenter">done</div>
     </div>
 
     <!--==================
