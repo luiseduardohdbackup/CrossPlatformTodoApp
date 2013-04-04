@@ -2,7 +2,7 @@
 
 var g = {
     mongoClient: null,
-    mongoCollection: null
+    todosCollection: null
 }
 
 exports.init = function(done){
@@ -10,15 +10,15 @@ exports.init = function(done){
 }
 
 exports.getAll = function(username, done){
-    g.mongoCollection.find({ username: username }, { content: 1, _id: 1 }).toArray(done);
+    g.todosCollection.find({ username: username }, { content: 1, _id: 1 }).toArray(done);
 }
 
 exports.get = function(username, _id, done){
-    g.mongoCollection.findOne({ username: username, _id: new mongo.ObjectID(_id) }, { content: 1, _id: 1 }, done);
+    g.todosCollection.findOne({ username: username, _id: new mongo.ObjectID(_id) }, { content: 1, _id: 1 }, done);
 }
 
 exports.create = function(username, content, done){
-    g.mongoCollection.insert(
+    g.todosCollection.insert(
         {    
             username: username,
             content: content
@@ -33,7 +33,7 @@ exports.create = function(username, content, done){
 }
 
 exports.update = function(username, _id, content, done){
-    g.mongoCollection.find(
+    g.todosCollection.find(
         { 
             username: username,
             _id: new mongo.ObjectID(_id)
@@ -51,11 +51,11 @@ exports.update = function(username, _id, content, done){
 }
 
 exports.deleteAll = function(username, done){
-    g.mongoCollection.remove({ 'username': username }, done);
+    g.todosCollection.remove({ 'username': username }, done);
 }
 
 exports.delete = function(username, _id, done){
-    g.mongoCollection.remove({ 'username': username, _id: new mongo.ObjectID(_id) }, done);
+    g.todosCollection.remove({ 'username': username, _id: new mongo.ObjectID(_id) }, done);
 }
 
 //===========================
@@ -101,7 +101,7 @@ function openCollection(collectionName, done){
         if (error)
             done(error)
 
-        g.mongoCollection = collection;
+        g.todosCollection = collection;
 
         done();
     }
